@@ -1,0 +1,1 @@
+# polite-transaction-store-auth-resource
