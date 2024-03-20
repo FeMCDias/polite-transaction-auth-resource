@@ -14,11 +14,6 @@ public class AuthResource implements AuthController{
     @Override
     public ResponseEntity<?> create(RegisterIn in) {
 
-        final String password = in.password().trim();
-        if (null == password || password.isEmpty()) throw new IllegalArgumentException("Password is required");
-        if (password.length() < 4) throw new IllegalArgumentException("Password must be at least 4 characters");
-        
-
         final String id = authService.register(Register.builder()
             .name(in.name())
             .email(in.email())
@@ -38,6 +33,18 @@ public class AuthResource implements AuthController{
     public ResponseEntity<LoginOut> authenticate(CredentialIn in) {
         authService.authenticate(in.email(), in.password());
         return ResponseEntity.ok(authService.authenticate(in.email(), in.password()));
+    }
+
+    @Override
+    public ResponseEntity<SolveOut> solve(SolveIn in) {
+        final Token token = authService.solve(in.token());
+        return ResponseEntity.ok(
+            SolveOut.builder()
+                .id(token.id())
+                .name(token.name())
+                .role(token.role())
+                .build()
+        );
     }
 }
 
